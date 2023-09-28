@@ -18,7 +18,7 @@ The above link takes you to a video of the parking space detection program in ac
 
 To run:
 ```python
-python main.py --image images/parking_lot_1.png --data data/coordinates_1.yml --video videos/parking_lot_1.mp4 --start-frame 400
+python main.py --image images/estacionamento1.png --data data/coordinates_1.yml --start-frame 400
 ```
 
 Program flow is as follows:

@@ -2,6 +2,7 @@ import argparse
 import yaml
 from coordinates_generator import CoordinatesGenerator
 from motion_detector import MotionDetector
+from take_picture import TakePicture
 from colors import *
 import logging
 
@@ -15,15 +16,21 @@ def main():
     data_file = args.data_file
     start_frame = args.start_frame
 
-    if image_file is not None:
+    # Take picture and saves it
+    cam = TakePicture(image_file)
+    image_saved = cam.take_picture()
+
+
+    if image_saved:
         with open(data_file, "w+") as points:
             generator = CoordinatesGenerator(image_file, points, COLOR_RED)
             generator.generate()
 
     with open(data_file, "r") as data:
-        points = yaml.load(data)
-        detector = MotionDetector(args.video_file, points, int(start_frame))
-        detector.detect_motion()
+        print(data)
+        points = yaml.safe_load(data)
+        detector = MotionDetector(points, int(start_frame))
+        detector.detect_live_motion()
 
 
 def parse_args():
@@ -33,11 +40,6 @@ def parse_args():
                         dest="image_file",
                         required=False,
                         help="Image file to generate coordinates on")
-
-    parser.add_argument("--video",
-                        dest="video_file",
-                        required=True,
-                        help="Video file to detect motion on")
 
     parser.add_argument("--data",
                         dest="data_file",
